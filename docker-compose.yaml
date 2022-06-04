@@ -1,0 +1,31 @@
+version: '3.1'
+
+services:
+  tor:
+    build:
+      context: ./tor
+    ports:
+      - 9050:9050
+
+  wordpress:
+    ports:
+      - 8080:80
+    build:
+      context: ./wordpress
+    restart: always
+    env_file:
+      - .env
+
+  db:
+    image: mysql
+    platform: linux/x86_64
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:
